@@ -6,7 +6,7 @@ import os
 
 API_TOKEN = os.getenv('BOT_TOKEN')
 
-WEBHOOK_HOST = os.getenv('VERCEL_URL')  # Replace with your Vercel domain or custom domain
+WEBHOOK_HOST = os.getenv('VERCEL_URL')   # Replace with your Vercel domain or custom domain
 WEBHOOK_PORT = 443  # Use port 443 for HTTPS
 WEBHOOK_LISTEN = '0.0.0.0'  # Usually, this is fine
 
