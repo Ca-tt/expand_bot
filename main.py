@@ -17,10 +17,11 @@ async def main():
     commands.handle_start() 
     commands.handle_help() 
     commands.setCommands()
-    bot_thread = Thread(target=expand_bot.run_bot, daemon=True)
-    bot_thread.start()
+    # bot_thread = Thread(target=expand_bot.run_bot, daemon=True)
+    # bot_thread.start()
+    
 
-    # expand_bot.run_bot()
+    expand_bot.run_bot()
 
 
 

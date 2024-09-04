@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: expand-telegram-bot
-    env: python
-    plan: free
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker"
