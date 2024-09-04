@@ -19,7 +19,7 @@ async def startup():
     webhook_url = f"https://{os.environ['VERCEL_URL']}/{os.environ['BOT_TOKEN']}"
     expand_bot.bot.set_webhook(webhook_url)
 
-@app.post("/webhook")
+@app.post(f"/{os.environ['BOT_TOKEN']}")
 async def webhook(update: dict):
     # Process the incoming update
     expand_bot.bot.process_new_updates([telebot.types.Update.de_json(update)])
