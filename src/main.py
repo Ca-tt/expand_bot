@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+
 from telebot import TeleBot
 import os
 from dotenv import load_dotenv
@@ -25,6 +27,14 @@ class Dotenv():
         
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins. Change to specific origins as needed.
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.). Adjust as needed.
+    allow_headers=["*"],  # Allows all headers. Adjust as needed.
+)
 
 BOT_TOKEN = Dotenv().bot_token
 VERCEL_URL = 'https://expand-telegram-bot.vercel.app'
