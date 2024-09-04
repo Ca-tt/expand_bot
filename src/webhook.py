@@ -3,7 +3,20 @@ import os
 import time
 from http.server import BaseHTTPRequestHandler
 from telebot import types
-from main import bot
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from telebot import TeleBot, types
+import os
+from dotenv import load_dotenv
+import logging
+
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+bot = TeleBot(BOT_TOKEN, threaded=False)
+
+
+@bot.message_handler()
+def main(msg):
+    bot.send_message(msg.chat.id, msg.text)
 
 
 class handler(BaseHTTPRequestHandler):
