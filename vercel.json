@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "/src/main.py",
+      "src": "src/main.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb"
@@ -11,8 +11,8 @@
   ],
   "routes": [
     {
-      "src": "/webhook",
-      "dest": "/src/main.py"
+      "src": "/(.*)",
+      "dest": "src/main.py"
     }
   ]
 }
