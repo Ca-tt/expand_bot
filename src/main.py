@@ -64,6 +64,7 @@ async def set_webhook():
         logging.error(f"Error setting webhook: {e}")
 
 
+
 if __name__ == "__main__":
     import asyncio
     asyncio.run(set_webhook())
