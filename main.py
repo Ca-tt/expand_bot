@@ -1,8 +1,15 @@
 from bot.Bot import Bot
 from commands.Commands import Commands
+from threading import Thread
+import fastapi
+import uvicorn
 
 
-def main():
+app = fastapi.FastAPI()
+
+
+@app.on_event("startup")
+async def main():
     expand_bot = Bot()
     
     commands = Commands(expand_bot.bot, expand_bot.username)
@@ -10,11 +17,13 @@ def main():
     commands.handle_start() 
     commands.handle_help() 
     commands.setCommands()
+    bot_thread = Thread(target=expand_bot.run_bot, daemon=True)
+    bot_thread.start()
 
-    expand_bot.run_bot()
+    # expand_bot.run_bot()
 
 
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 

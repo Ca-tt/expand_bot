@@ -9,6 +9,9 @@ python-dotenv = "*"
 pytelegrambotapi = "*"
 pylint = "*"
 psutil = "*"
+unicorn = "*"
+uvicorn = "*"
+fastapi = "*"
 
 [dev-packages]
 
