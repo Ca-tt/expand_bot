@@ -16,7 +16,7 @@ commands.setCommands()
 @app.on_event("startup")
 async def startup():
     # Set the webhook with your Vercel deployment URL
-    webhook_url = f"https://{os.environ['VERCEL_URL']}/webhook"
+    webhook_url = f"https://{os.environ['VERCEL_URL']}/{os.environ['BOT_TOKEN']}"
     expand_bot.bot.set_webhook(webhook_url)
 
 @app.post("/webhook")
