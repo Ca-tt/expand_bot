@@ -5,3 +5,4 @@
 - захостить бота, чтобы понять, что из этого получится
 
 <!-- gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker -->
+
