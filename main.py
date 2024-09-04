@@ -3,7 +3,7 @@ from commands.Commands import Commands
 from threading import Thread
 import fastapi
 import uvicorn
-
+import os
 
 app = fastapi.FastAPI()
 
@@ -23,8 +23,16 @@ async def main():
 
     expand_bot.run_bot()
 
-
+@app.get("/")
+async def root():
+    return {"message": "Bot is running"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
+
+""" Render """
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8000)
 
