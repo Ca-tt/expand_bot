@@ -9,6 +9,7 @@ from utils.Dotenv import Dotenv
 USERS_FILE = "json/users.json"
 json_users = Json(file=USERS_FILE)
 
+# chosen users list
 admin_id = Dotenv('ADMIN_ID').load_env_data()
 students_ids = Dotenv('STUDENTS_IDS').load_env_data()
 
@@ -25,7 +26,7 @@ class User:
         self.saveUserToJson()
 
     # define access level
-    def setAccessLevel(self):  
+    def setAccessLevel(self):
         access = 'partner'
 
         if self.id in students_ids:
@@ -45,11 +46,11 @@ class User:
             "access": self.access,
             "registration_date": self.signup_date,
         }
+
         json_users.saveUser(new_user)
 
-    def saveAction(self):
-        print('test: ')
-
+    # def saveAction(self):
+        # print('test: ')
 
 
 """ 

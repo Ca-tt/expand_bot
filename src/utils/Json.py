@@ -17,25 +17,26 @@ class Json:
 
         return empty_array
 
-    def is_user_exists(self, userID):
+    # check if user exists in DB
+    def is_user_exists(self, passedUserID):
         for user in self.data:
             print('user', user)
-            if user['id'] == userID:
+            print('user id', user['id'])
+            if user['id'] == passedUserID:
                 return True
-            return False
+        return False
 
     # вытягиваем юзеров
     def get_json_data(self):
         with open(self.file, "r", encoding=self.encoding) as users_file:
             try:
                 data = json.load(users_file)
-                # print('json file data: ', data)
             except Exception as e:
                 data = self.handle_empty_json()
 
             return data
 
-    # регистрируем юзеров
+    # регистрируем пользователя в БД
     def saveUser(self, user):
         is_registered = self.is_user_exists(user['id'])
         print('Зареганый в БД?: ', is_registered)
@@ -43,17 +44,17 @@ class Json:
         # если зарегистрирован...
         if is_registered:
             print(
-                f"Пользователь @{user['username']} с именем '{user['first_name']}' уже зарегистрирован в боте!")
+                f"'{user['first_name']}' @{user['username']} уже зарегистрирован в боте!")
             return
 
         self.data.append(user)
         with open(self.file, 'w', encoding=self.encoding) as users_file:
             json.dump(self.data, users_file, ensure_ascii=False)
             print(
-                f"Пользователь @{user['username']} с именем '{user['first_name']}' только что зарегистрировался в боте!")
- 
+                f"'{user['first_name']}' @{user['username']} только что зарегистрировался в боте!")
+
     # достаём доступ юзера (role / access)
     def get_user_access(self, id):  # на основе id из JSON
         user_id = id
         users_data = self.get_json_data()
-        print('users data: ', users_data)
+        # print('users data: ', users_data)

@@ -1,4 +1,9 @@
+# folders
+.vscode/
 json/
+
+# files
 Pipfile.lock
 .env
 *.pyc
+plan.md

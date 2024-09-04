@@ -19,7 +19,7 @@ class Bot:
         bot_name = self.get_bot_data(bot=bot, requested_data="first_name")
 
         if bot:
-            print(f"Bot {bot_name} connected succesfully!")
+            print(f"Подключаюсь к боту '{bot_name}'...")
             print_separators()
 
         return bot
@@ -35,14 +35,14 @@ class Bot:
     def run_bot(self) -> None:
         bot_username = self.get_bot_data(bot=self.bot, requested_data="username")
 
-        print(f"bot @{bot_username} is activated and ready for your commands...")
+        print(f"Бот @{bot_username} подключён! Нажми /start для начала")
         print_separators() 
 
         # terminate previous instance
         # if self.bot.polling():
         #     self.bot.stop_polling()
 
-        self.bot.infinity_polling(long_polling_timeout=20)
+        self.bot.polling()
 
 
 def print_separators() -> None:
