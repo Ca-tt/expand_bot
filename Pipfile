@@ -12,6 +12,7 @@ psutil = "*"
 unicorn = "*"
 uvicorn = "*"
 fastapi = "*"
+gunicorn = "*"
 
 [dev-packages]
 
