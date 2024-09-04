@@ -12,7 +12,7 @@
   "routes": [
     {
       "src": "/webhook",
-      "dest": "src/test.py"
+      "dest": "/src/test.py"
     }
   ]
 }
