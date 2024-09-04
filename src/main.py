@@ -1,89 +1,68 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from telebot import TeleBot, types
-import os
-from dotenv import load_dotenv
 import logging
+import fastapi
+import uvicorn
+import telebot
+import os
+
+API_TOKEN = os.getenv('BOT_TOKEN')
+
+WEBHOOK_HOST = os.getenv('VERCEL_URL')  # Replace with your Vercel domain or custom domain
+WEBHOOK_PORT = 443  # Use port 443 for HTTPS
+WEBHOOK_LISTEN = '0.0.0.0'  # Usually, this is fine
+
+WEBHOOK_URL_BASE = "https://{}".format(WEBHOOK_HOST)
+WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
+
+logger = telebot.logger
+telebot.logger.setLevel(logging.INFO)
+
+bot = telebot.TeleBot(API_TOKEN)
+
+app = fastapi.FastAPI(docs=None, redoc_url=None)
 
 
-# load_dotenv()
+@app.post(f'/{API_TOKEN}/')
+def process_webhook(update: dict):
+    """
+    Process webhook calls
+    """
+    if update:
+        update = telebot.types.Update.de_json(update)
+        bot.process_new_updates([update])
+    else:
+        return
 
 
-# class Dotenv():
-#     def __init__(self):
-#         load_dotenv()
-        
-#         self.bot_token = ''
-#         self.admin_id = ''
-#         self.student_ids = ''
-        
-#         self.get_env_data()
-        
-#     def get_env_data(self):
-#         self.bot_token = os.getenv('BOT_TOKEN')
-#         self.admin_id = int(os.getenv('ADMIN_ID'))
-#         self.student_ids = [int(item) for item in os.getenv('STUDENT_IDS').split(',')]
-        
-
-# app = FastAPI()
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # Allows all origins. Change to specific origins as needed.
-#     allow_credentials=True,
-#     allow_methods=["*"],  # Allows all methods (GET, POST, etc.). Adjust as needed.
-#     allow_headers=["*"],  # Allows all headers. Adjust as needed.
-# )
-
-# BOT_TOKEN = Dotenv().bot_token
-# VERCEL_URL = 'https://expand-telegram-bot.vercel.app'
-# updates_webhook = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={VERCEL_URL}/webhook"
-
-# bot = TeleBot(BOT_TOKEN)
+@bot.message_handler(commands=['help', 'start'])
+def send_welcome(message):
+    """
+    Handle '/start' and '/help'
+    """
+    bot.reply_to(message,
+                 ("Hi there, I am EchoBot.\n"
+                  "I am here to echo your kind words back to you."))
 
 
-# @app.post("/webhook")
-# async def webhook(request: Request):
-#     json_str = await request.body()
-#     update = types.Update.de_json(json_str)
-#     bot.process_new_updates([update])
-#     return {"status": "ok"}
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def echo_message(message):
+    """
+    Handle all other messages
+    """
+    bot.reply_to(message, message.text)
 
 
-# @bot.message_handler(commands=['start', 'help'])
-# def send_welcome(message):
-#     bot.reply_to(message, "Welcome! I'm your bot.")
+# Remove webhook, it fails sometimes the set if there is a previous webhook
+bot.remove_webhook()
 
+# Set webhook
+bot.set_webhook(
+    url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH
+)
 
-# @bot.message_handler(func=lambda message: True)
-# def echo_all(message):
-#     bot.reply_to(message, message.text)
-
-
-# async def set_webhook():
-#     try:
-#         webhook_url = f"{VERCEL_URL}/webhook"
-        
-#         async with aiohttp.ClientSession() as session:
-#             async with session.get(f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={webhook_url}") as response:
-#                 if response.status == 200:
-#                     logging.info("Webhook set successfully")
-#                 else:
-#                     logging.error("Failed to set webhook")
-#     except Exception as e:
-#         logging.error(f"Error setting webhook: {e}")
-
-
-
-# if __name__ == "__main__":
-#     import asyncio
-#     asyncio.run(set_webhook())
-
-
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-bot = TeleBot(BOT_TOKEN, threaded=False)
-
-
-@bot.message_handler()
-def main(msg):
-    bot.send_message(msg.chat.id, msg.text)
+uvicorn.run(
+    app,
+    host=WEBHOOK_LISTEN,
+    port=WEBHOOK_PORT,
+    ssl_certfile=None,  # Not needed for Vercel
+    ssl_keyfile=None    # Not needed for Vercel
+)
