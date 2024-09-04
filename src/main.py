@@ -1,10 +1,5 @@
-import os
-from fastapi import FastAPI, Request
 from bot.Bot import Bot
 from commands.Commands import Commands
-
-
-app = FastAPI()
 
 
 def main():
