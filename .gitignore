@@ -7,3 +7,9 @@ Pipfile.lock
 .env
 *.pyc
 plan.md
+
+src/bot/__pycache__
+src/commands/__pycache__
+src/users/__pycache__
+src/utils/__pycache__
+src/__pycache__
