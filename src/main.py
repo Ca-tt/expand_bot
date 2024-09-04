@@ -11,7 +11,7 @@ from telebot import apihelper
 
 API_TOKEN = os.getenv('BOT_TOKEN')
 WEBHOOK_HOST = os.getenv('VERCEL_URL')  # Replace with your Vercel domain or custom domain
-WEBHOOK_PORT = 80  # Use port 80 for HTTP
+WEBHOOK_PORT = 8080  # Use port 80 for HTTP
 WEBHOOK_LISTEN = '0.0.0.0'  # Usually, this is fine
 
 WEBHOOK_URL_BASE = "https://{}".format(WEBHOOK_HOST)
@@ -35,6 +35,7 @@ def process_webhook(update: dict):
     else:
         return
 
+
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
     """
@@ -43,6 +44,7 @@ def send_welcome(message):
     bot.reply_to(message,
                  ("Hi there, I am EchoBot.\n"
                   "I am here to echo your kind words back to you."))
+
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_message(message):
@@ -91,10 +93,10 @@ def set_webhook_with_retry(bot, url, max_retries=5, base_delay=1):
 bot.remove_webhook()
 
 # Set webhook with retry logic
-set_webhook_with_retry(
-    bot,
-    url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH
-)
+# set_webhook_with_retry(
+#     bot,
+#     url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH
+# )
 
 uvicorn.run(
     app,
