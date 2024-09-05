@@ -2,7 +2,7 @@ from bot.Bot import Bot
 from commands.Commands import Commands
 import fastapi
 import uvicorn
-
+from os import getenv
 
 app = fastapi.FastAPI()
 
@@ -22,5 +22,6 @@ async def main():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
