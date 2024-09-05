@@ -1,6 +1,5 @@
 from bot.Bot import Bot
 from commands.Commands import Commands
-from threading import Thread
 import fastapi
 import uvicorn
 
