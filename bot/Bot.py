@@ -21,7 +21,30 @@ class Bot:
 
 
     def connect_to_bot(self) -> TeleBot:
-        self.bot = TeleBot(self.bot_token)
+        try: 
+            self.bot = TeleBot(self.bot_token)
+            
+        except ApiTelegramException as e:
+            if e.error_code == 409:
+                print("Бот уже где-то запущен... Ошибка 409")
+                self.tell_admin("Бот запущен ёще-то (multiple instances), ошибка 409")
+                
+                self.bot.stop_bot()
+                self.bot.infinity_polling(timeout=10, long_polling_timeout=5)
+        
+            else:
+                print(f"Unexpected error occurred: {e}")
+                self.tell_admin('Неизвестная ошибка при запуске бота (else)')
+                self.bot.stop_bot()
+                self.bot.infinity_polling(timeout=10, long_polling_timeout=5)
+                
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            self.tell_admin('exception (not 409)')
+            self.bot.stop_bot()
+            self.bot.infinity_polling(timeout=10, long_polling_timeout=5)
+        
+            
         bot_name = self.get_bot_data(bot=self.bot, requested_data="first_name")
 
         if self.bot:
@@ -49,28 +72,29 @@ class Bot:
         print(f"Бот @{bot_username} подключён! Нажми /start для начала")
         print_separators() 
         
-        while True:
-            try:
+        try:
+            self.bot.infinity_polling(timeout=10, long_polling_timeout=5)
+            
+        except ApiTelegramException as e:
+            
+            if e.error_code == 409:
+                print("Бот уже где-то запущен... Ошибка 409")
+                self.tell_admin("Бот запущен ёще-то (multiple instances), ошибка 409")
+                
+                self.bot.stop_bot()
                 self.bot.infinity_polling(timeout=10, long_polling_timeout=5)
-                
-            except ApiTelegramException as e:
-                
-                if e.error_code == 409:
-                    print("Бот уже где-то запущен... Ошибка 409")
-                    self.tell_admin("Бот запущен ёще-то (multiple instances), ошибка 409")
-                    
-                    sleep(10)
-                    continue
-                
-                else:
-                    print(f"Unexpected error occurred: {e}")
-                    self.tell_admin('Неизвестная ошибка при запуске бота (else)')
-                    break
-                
-            except Exception as e:
-                print(f"Error occurred: {e}")
-                self.tell_admin('exception (not 409)')
-                sleep(5)  # Wait before retrying
+            
+            else:
+                print(f"Unexpected error occurred: {e}")
+                self.tell_admin('Неизвестная ошибка при запуске бота (else)')
+                self.bot.stop_bot()
+                self.bot.infinity_polling(timeout=10, long_polling_timeout=5)
+            
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            self.tell_admin('exception (not 409)')
+            self.bot.stop_bot()
+            self.bot.infinity_polling(timeout=10, long_polling_timeout=5)
 
 
 def print_separators() -> None:

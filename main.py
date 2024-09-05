@@ -4,6 +4,8 @@ import fastapi
 import uvicorn
 from os import getenv
 
+PORT = int(getenv("PORT", 8000))
+
 app = fastapi.FastAPI()
 
 
@@ -22,6 +24,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    port = int(getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
 
