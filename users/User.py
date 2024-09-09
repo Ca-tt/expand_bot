@@ -6,7 +6,7 @@ from utils.Dotenv import Dotenv
 
 
 # JSON handling
-USERS_FILE = "src/json/users.json"
+USERS_FILE = "json/users.json"
 json_users = Json(file=USERS_FILE)
 
 # chosen users list
